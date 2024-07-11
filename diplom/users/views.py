@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from django.contrib.auth import logout
 
 
 def register(request):
@@ -14,7 +15,7 @@ def register(request):
             return redirect('login')
     else:
         form = UserRegisterForm()
-    return render(request, 'users/register.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
 
 
 @login_required
@@ -37,4 +38,10 @@ def profile(request):
         'p_form': p_form
     }
 
-    return render(request, 'user/profile.html', context)
+    return render(request, 'profile.html', context)
+
+@login_required
+def user_logout(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return render(request, 'logout.html')
